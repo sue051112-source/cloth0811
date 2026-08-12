@@ -8,10 +8,17 @@
     <link href="css/정답.css" rel="stylesheet" type="text/css">
 </head>
 <body>
+    <!-- 상단 롤링 마퀴 배너 -->
+    <div class="top_marquee" aria-hidden="true">
+        <div class="marquee_track" id="marqueeTrack">
+            <span class="marquee_item">FREE SHIPPING ON 50,000원+ <span class="dot">·</span> NEW DROP EVERY WEEK <span class="dot">·</span> VINTAGE CURATED BY AROUND9 <span class="dot">·</span> </span>
+            <span class="marquee_item">FREE SHIPPING ON 50,000원+ <span class="dot">·</span> NEW DROP EVERY WEEK <span class="dot">·</span> VINTAGE CURATED BY AROUND9 <span class="dot">·</span> </span>
+        </div>
+    </div>
     <!-- 전체감싸는 박스 -->
     <div id="wrap">
         <!-- 헤더 -->
-        <div class="header">
+        <div class="header" id="header">
             <!-- 로고 -->
             <div class="logo">
                 <h1>
@@ -75,13 +82,40 @@
             </div>
         </div>
 
-        <!-- 메인광고 -->
-        <div class="main_ad">
-            <img src="img/banner/main.png" alt="AROUND9 메인 배너 - 빈티지 스트릿 룩을 입은 모델">
-            <div class="main_ad_txt">
-                <p class="main_copy">매일 다르게, 나답게</p>
-                <p class="sub_copy">Vintage Sourcing, Daily Styling</p>
-                <a href="#none" class="main_btn">NEW COLLECTION 보러가기<span class="arrow">&rarr;</span></a>
+        <!-- 메인광고 (자동 슬라이드) -->
+        <div class="main_ad" id="mainSlider">
+            <div class="slider_track">
+                <div class="slide active" data-index="0">
+                    <img src="img/banner/1.jpg" alt="AROUND9 메인 배너 - 데님 재킷과 카고팬츠 룩북 컷">
+                    <div class="main_ad_txt">
+                        <p class="main_copy">매일 다르게, 나답게</p>
+                        <p class="sub_copy">Vintage Sourcing, Daily Styling</p>
+                        <a href="#none" class="main_btn">NEW COLLECTION 보러가기<span class="arrow">&rarr;</span></a>
+                    </div>
+                </div>
+                <div class="slide" data-index="1">
+                    <img src="img/banner/2.jpg" alt="AROUND9 메인 배너 - 빈티지 데님과 니트 룩북 컷">
+                    <div class="main_ad_txt">
+                        <p class="main_copy">이번 주, 새로운 빈티지가 도착했어요</p>
+                        <p class="sub_copy">매주 업데이트되는 신상 셀렉션</p>
+                        <a href="#none" class="main_btn">NEW ARRIVAL 보러가기<span class="arrow">&rarr;</span></a>
+                    </div>
+                </div>
+                <div class="slide" data-index="2">
+                    <img src="img/banner/3.jpg" alt="AROUND9 메인 배너 - 스트릿 캐주얼 룩북 컷">
+                    <div class="main_ad_txt">
+                        <p class="main_copy">지금 가장 많이 찾는 스트릿 아이템</p>
+                        <p class="sub_copy">실시간 인기 랭킹으로 확인하기</p>
+                        <a href="#none" class="main_btn">BEST 상품 보러가기<span class="arrow">&rarr;</span></a>
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="slider_arrow prev" aria-label="이전 슬라이드">&#10094;</button>
+            <button type="button" class="slider_arrow next" aria-label="다음 슬라이드">&#10095;</button>
+            <div class="slider_dots">
+                <button type="button" class="dot active" data-index="0" aria-label="1번 슬라이드로 이동"></button>
+                <button type="button" class="dot" data-index="1" aria-label="2번 슬라이드로 이동"></button>
+                <button type="button" class="dot" data-index="2" aria-label="3번 슬라이드로 이동"></button>
             </div>
         </div>
 
@@ -346,5 +380,6 @@
             <p>around9.official@naver.com</p>
         </div>
     </div>
+    <script type="module" src="js/main.js"></script>
 </body>
 </html>

@@ -15,12 +15,6 @@ body{
 .logo{
     /* 텍스트 로고를 #wrap 안에서 가운데 정렬 */
     text-align: center;
-    line-height: 140px;
-    /* line-height는 자식에게 상속된다
-    ->자식에게 높이값이 생긴다
-    ->부모요소는 display block요소이다
-    ->즉 display block요소는 자식만큼 차지하는데 line-height값이 상속되면서
-    자식에게 높이값이 생기므로 부모에게 height값을 안줘도 됨 */
 }
 
 .logo a{
@@ -31,7 +25,7 @@ body{
     letter-spacing: -0.5px;
     color: #2B2420;
     text-decoration: none;
-    transition: color 0.2s ease;
+    transition: color 0.2s ease, font-size 0.3s ease;
 }
 
 .logo a:hover{
@@ -40,6 +34,64 @@ body{
 
 .logo a .point{
     color: #7A5C3E;
+}
+
+/* 상단 롤링 마퀴 배너 */
+.top_marquee{
+    width: 100%;
+    height: 36px;
+    overflow: hidden;
+    background-color: #2B2420;
+    white-space: nowrap;
+}
+
+.marquee_track{
+    display: inline-flex;
+    height: 36px;
+    align-items: center;
+    will-change: transform;
+}
+
+.marquee_item{
+    display: inline-flex;
+    align-items: center;
+    padding-right: 40px;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    color: #F5F0E8;
+    white-space: nowrap;
+}
+
+.marquee_item .dot{
+    color: #7A5C3E;
+    margin: 0 10px;
+}
+
+/* 헤더 (스티키 + 스크롤 축소) */
+.header{
+    position: fixed;
+    top: 36px;
+    left: 50%;
+    width: 1660px;
+    height: 140px;
+    transform: translateX(-50%);
+    z-index: 900;
+    background-color: #F5F0E8;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: height 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.header.scrolled{
+    height: 80px;
+    background-color: #FFFFFF;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+
+.header.scrolled .logo a{
+    font-size: 18px;
 }
 
 .gnb{
@@ -120,6 +172,73 @@ body{
     ->인라인요소의 특징 때문에 퍼센트 요소가
       적용되지 않을 때 할아버지인 display
       block요소 기준으로 100%차지함 */
+}
+
+/* 메인배너 슬라이드 */
+.slide{
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    z-index: 1;
+    transition: opacity 0.8s ease;
+}
+
+.slide.active{
+    opacity: 1;
+    z-index: 2;
+}
+
+.slider_arrow{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.3);
+    color: #FFFFFF;
+    font-size: 14px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 5;
+    transition: background 0.2s ease;
+}
+
+.slider_arrow:hover{
+    background: rgba(0,0,0,0.55);
+}
+
+.slider_arrow.prev{ left: 24px; }
+.slider_arrow.next{ right: 24px; }
+
+.slider_dots{
+    position: absolute;
+    left: 50%;
+    bottom: 24px;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 5;
+}
+
+.slider_dots .dot{
+    width: 9px;
+    height: 9px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.5);
+    cursor: pointer;
+    transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.slider_dots .dot.active{
+    background: #7A5C3E;
+    transform: scale(1.3);
 }
 
 .main_ad_txt{
@@ -401,4 +520,16 @@ body{
     font-weight: 700;
     color: #2B2420;
     letter-spacing: -0.5px;
+}
+
+/* 스크롤 페이드인 애니메이션 */
+.fade-init{
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.fade-init.fade-in{
+    opacity: 1;
+    transform: translateY(0);
 }
