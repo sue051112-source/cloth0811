@@ -4,12 +4,12 @@ import { renderLookCard, initLookCards } from "../components/lookCard.js";
 import { navigate } from "../router/router.js";
 
 const SITUATION_IMAGES = {
-  DAILY: situationImage("DAILY", 301),
-  CAFE: situationImage("CAFE", 302),
-  DATE: situationImage("DATE", 303),
-  CAMPUS: situationImage("CAMPUS", 304),
-  STREET: situationImage("STREET", 305),
-  TRAVEL: situationImage("TRAVEL", 306),
+  DAILY: situationImage("DAILY"),
+  CAFE: situationImage("CAFE"),
+  DATE: situationImage("DATE"),
+  CAMPUS: situationImage("CAMPUS"),
+  STREET: situationImage("STREET"),
+  TRAVEL: situationImage("TRAVEL"),
 };
 
 export function renderHomePage() {

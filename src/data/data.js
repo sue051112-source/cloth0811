@@ -39,21 +39,19 @@ const COLOR_HEX = {
   NAVY: "#2B3244",
 };
 
-export const SITUATION_TAG = {
-  DAILY: "fashion,lifestyle,daily",
-  CAFE: "cafe,fashion,model",
-  DATE: "fashion,couple,romantic",
-  CAMPUS: "campus,fashion,student",
-  STREET: "street,fashion,model",
-  TRAVEL: "travel,fashion,model",
-};
+// public/images 안의 로컬 이미지 경로를 배포 경로(base) 기준으로 안전하게 조합합니다.
+function resolveImage(path) {
+  if (!path) return path;
+  if (/^https?:\/\//.test(path)) return path;
+  return `${import.meta.env.BASE_URL}images/${path}`;
+}
 
-export function situationImage(code, lock) {
-  return `https://loremflickr.com/400/720/${SITUATION_TAG[code]}?lock=${lock}`;
+export function situationImage(code) {
+  return resolveImage(`situations/${code.toLowerCase()}.jpg`);
 }
 
 export function heroImage() {
-  return `https://loremflickr.com/900/1100/fashion,model,editorial?lock=999`;
+  return resolveImage("hero.jpg");
 }
 
 export let PRODUCTS = [];
@@ -79,7 +77,7 @@ export async function initCatalog() {
     description: p.description,
     colors: (p.colors || []).map((name) => ({ name, hex: COLOR_HEX[name] || "#CCCCCC" })),
     sizes: p.sizes || [],
-    images: p.image_urls || [],
+    images: (p.image_urls || []).map(resolveImage),
   }));
 
   LOOKS = (looks || []).map((l) => ({
@@ -89,7 +87,7 @@ export async function initCatalog() {
     situation: l.situation,
     mood: l.mood,
     description: l.description,
-    image: l.image_url,
+    image: resolveImage(l.image_url),
     productIds: (lookProducts || []).filter((lp) => lp.look_id === l.id).map((lp) => lp.product_id),
   }));
 }
