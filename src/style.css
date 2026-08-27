@@ -2,19 +2,49 @@
 
 /* ========================================================
    FITROOM 디자인 시스템 — 색상 / 폰트 / 사이즈 토큰
+
+   컬러: 뉴트럴 베이스(bg/surface/ink/ink-soft/line) 5개는
+   큰 면적에만 사용하고, 무드 액센트 6개(mood-*)는 카드 태그·
+   버튼 hover·보드 배경 같은 디테일에만 절제해서 사용한다.
    ======================================================== */
+@font-face {
+  font-family: "Fraunces";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("./assets/fonts/fraunces-600.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Fraunces";
+  font-style: italic;
+  font-weight: 500;
+  font-display: swap;
+  src: url("./assets/fonts/fraunces-500i.woff2") format("woff2");
+}
+
 :root {
-  --bg: #F8F7F4;
+  --bg: #E6E2D9;
   --card: #FFFFFF;
-  --text: #171717;
-  --text-sub: #777777;
-  --text-light: #A5A5A5;
-  --border: #E5E3DE;
-  --border-strong: #D8D6D0;
-  --accent: #171717;
-  --accent-hover: #444444;
-  --hero-bg: #E9E4DC;
+  --text: #17151A;
+  --text-sub: #726C63;
+  --text-light: #9C9689;
+  --border: #D8D2C5;
+  --border-strong: #C9C1B0;
+  --accent: #17151A;
+  --accent-hover: #3E3B36;
+  --hero-bg: #17151A;
   --editorial-bg: #D9D2C7;
+
+  /* 무드 액센트 — 상황이 아니라 "무드"에 매핑되는 6가지 포인트 컬러 */
+  --mood-minimal: #8C8579;
+  --mood-casual: #C08A3E;
+  --mood-soft: #C99B95;
+  --mood-vintage: #A85A38;
+  --mood-street: #4B4E3C;
+  --mood-mono: #17151A;
+
+  --serif: "Fraunces", Georgia, serif;
+  --sans: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
 
   --header-h: 72px;
   --side-pad: 60px;
@@ -26,6 +56,14 @@
   --radius-img: 0px;
   --radius-card: 0px;
   --radius-modal: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 * {
@@ -41,7 +79,7 @@ body {
   overflow-x: hidden;
   background: var(--bg);
   color: var(--text);
-  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  font-family: var(--sans);
   font-size: 13px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
@@ -73,15 +111,36 @@ img { display: block; max-width: 100%; }
 }
 
 /* ========================================================
-   공통 타이포
+   공통 타이포 — 타이틀(Fraunces)은 브랜드 목소리, 본문(Pretendard)은 정보 전달
    ======================================================== */
 .brand-logo {
-  font-size: 22px;
-  font-weight: 800;
-  letter-spacing: -0.8px;
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 26px;
+  letter-spacing: -0.3px;
 }
-.page-title { font-size: 42px; font-weight: 700; line-height: 1.2; margin: 0; }
-.section-title { font-size: 26px; font-weight: 700; margin: 0; }
+.page-title {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: clamp(48px, 6vw, 76px);
+  line-height: 0.98;
+  letter-spacing: -2px;
+  margin: 0;
+}
+.section-title {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 28px;
+  letter-spacing: -0.5px;
+  margin: 0;
+}
+.section-title-lg {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 36px;
+  letter-spacing: -1px;
+}
 .product-name { font-size: 14px; font-weight: 500; }
 .price { font-size: 14px; font-weight: 600; }
 .body-text { font-size: 13px; font-weight: 400; }
@@ -188,39 +247,67 @@ img { display: block; max-width: 100%; }
 }
 
 /* ========================================================
-   HERO
+   HERO — 비대칭 풀블리드 (이미지가 상단까지 번지고 텍스트 카드가 하단에 겹침)
    ======================================================== */
 .hero {
+  position: relative;
   width: 100%;
   height: 680px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 40px;
-  padding: 60px;
   background: var(--hero-bg);
+  overflow: hidden;
 }
-.hero-left { display: flex; flex-direction: column; justify-content: center; }
-.hero-eyebrow { font-size: 11px; letter-spacing: 2px; margin-bottom: 28px; }
+.hero-image {
+  position: absolute;
+  top: 0; right: 0;
+  width: 64%;
+  height: 100%;
+  object-fit: cover;
+  animation: heroImageIn 1s ease both;
+}
+.hero-spine {
+  position: absolute;
+  left: 28px; top: 44px;
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: rgba(255,255,255,0.55);
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+.hero-text-card {
+  position: absolute;
+  left: 0; bottom: 0;
+  width: 460px;
+  max-width: 78%;
+  background: var(--card);
+  padding: 48px 44px;
+  animation: heroTextIn 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-delay: 0.15s;
+}
+.hero-eyebrow { font-size: 11px; letter-spacing: 2px; color: var(--text-sub); margin-bottom: 24px; }
 .hero-title {
-  font-size: 64px;
-  font-weight: 700;
-  line-height: 1.05;
-  letter-spacing: -2.5px;
-  width: 520px;
-  max-width: 100%;
-  margin: 0 0 28px 0;
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: clamp(38px, 4.6vw, 62px);
+  line-height: 0.98;
+  letter-spacing: -2px;
+  margin: 0 0 22px 0;
 }
-.hero-desc { font-size: 15px; line-height: 1.7; margin: 0 0 36px 0; }
-.hero-btn { width: 150px; height: 48px; }
-.hero-right { position: relative; }
-.hero-right img {
-  width: 100%; height: 560px; object-fit: cover;
-}
+.hero-desc { font-size: 14px; line-height: 1.75; color: var(--text-sub); margin: 0 0 32px 0; }
+.hero-btn { width: 160px; height: 50px; }
 .hero-tag {
-  position: absolute; right: 20px; bottom: 20px;
-  background: rgba(255,255,255,0.9);
-  padding: 8px 12px;
+  position: absolute; right: 24px; bottom: 24px;
+  background: rgba(255,255,255,0.92);
+  padding: 8px 14px;
   font-size: 10px;
+  letter-spacing: 0.5px;
+}
+@keyframes heroImageIn {
+  from { opacity: 0; transform: scale(1.06); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes heroTextIn {
+  from { opacity: 0; transform: translateY(22px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* ========================================================
@@ -228,7 +315,7 @@ img { display: block; max-width: 100%; }
    ======================================================== */
 .situation-section { padding: 100px 60px; }
 .section-head { margin-bottom: 40px; }
-.section-head .section-title-lg { font-size: 28px; margin: 0 0 12px 0; }
+.section-head .section-title-lg { margin: 0 0 12px 0; }
 .section-head .section-desc { font-size: 13px; color: var(--text-sub); margin: 0; }
 .situation-grid {
   display: flex;
@@ -263,7 +350,7 @@ img { display: block; max-width: 100%; }
    SHOP BY MOOD
    ======================================================== */
 .mood-section { background: #FFFFFF; padding: 100px 60px; }
-.mood-section .section-title-lg { font-size: 28px; margin-bottom: 40px; }
+.mood-section .section-title-lg { margin-bottom: 40px; }
 .mood-list { display: flex; gap: 16px; flex-wrap: wrap; }
 .mood-btn {
   height: 48px;
@@ -325,7 +412,7 @@ img { display: block; max-width: 100%; }
    BEST LOOK / LOOK 카드
    ======================================================== */
 .best-look { padding: 110px 60px; background: #FFFFFF; }
-.best-look .section-title-lg { font-size: 28px; margin-bottom: 12px; }
+.best-look .section-title-lg { margin-bottom: 12px; }
 .best-look .section-desc { font-size: 13px; color: var(--text-sub); margin-bottom: 40px; }
 .look-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
 .look-card { width: 100%; cursor: pointer; }
@@ -334,8 +421,43 @@ img { display: block; max-width: 100%; }
 .look-card:hover .thumb img { transform: scale(1.03); }
 .look-card .info { padding-top: 16px; }
 .look-card .look-no { font-size: 10px; letter-spacing: 1.5px; color: var(--text-sub); margin-bottom: 6px; }
-.look-card .look-name { font-size: 18px; font-weight: 600; margin-bottom: 6px; }
+.look-card .look-name {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 19px;
+  letter-spacing: -0.3px;
+  margin-bottom: 6px;
+  transition: color 0.3s ease;
+}
+.look-card:hover .look-name { color: var(--mood-accent, var(--text)); }
 .look-card .look-tag { font-size: 11px; color: var(--text-sub); }
+.look-card .look-tag::before {
+  content: "";
+  display: inline-block;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--mood-accent, var(--text-light));
+  margin-right: 6px;
+  vertical-align: 1px;
+}
+
+/* BEST LOOKS 비대칭(1개 피처 + 2개 사이드) — HOME 전용, LOOKS 목록 그리드는 그대로 유지 */
+.best-asym { display: grid; grid-template-columns: 1.6fr 1fr; gap: 24px; }
+.best-asym-feature { height: 640px; }
+.best-asym-side { display: flex; flex-direction: column; gap: 24px; height: 640px; }
+.best-asym-side .look-card { flex: 1; min-height: 0; }
+.best-asym-feature .look-card,
+.best-asym-side .look-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.best-asym-feature .look-card .thumb,
+.best-asym-side .look-card .thumb {
+  flex: 1;
+  height: auto;
+  min-height: 0;
+}
 
 /* ========================================================
    EDITORIAL BANNER
@@ -348,7 +470,7 @@ img { display: block; max-width: 100%; }
 }
 .editorial-inner { text-align: center; }
 .editorial-eyebrow { font-size: 11px; letter-spacing: 2px; }
-.editorial-title { font-size: 48px; font-weight: 700; line-height: 1.05; margin-top: 20px; }
+.editorial-title { font-family: var(--serif); font-weight: 600; font-size: 54px; letter-spacing: -1.5px; line-height: 1.03; margin-top: 20px; }
 .editorial-btn { width: 160px; height: 46px; margin-top: 32px; }
 
 /* ========================================================
@@ -399,16 +521,82 @@ img { display: block; max-width: 100%; }
 .look-detail-img { width: 650px; height: 780px; object-fit: cover; flex-shrink: 0; }
 .look-detail-info { width: 500px; padding-left: 60px; }
 .look-detail-info .look-no { font-size: 11px; letter-spacing: 2px; margin-bottom: 18px; }
-.look-detail-info .look-title { font-size: 38px; font-weight: 700; margin-bottom: 16px; }
-.look-detail-info .look-tag { font-size: 12px; color: var(--text-sub); margin-bottom: 32px; }
+.look-detail-info .look-title { font-family: var(--serif); font-weight: 600; font-size: 46px; letter-spacing: -1.5px; line-height: 1.02; margin-bottom: 16px; }
+.look-detail-info .look-tag { font-size: 12px; color: var(--mood-accent, var(--text-sub)); margin-bottom: 32px; transition: color 0.3s ease; }
 .look-detail-info .look-desc { font-size: 13px; line-height: 1.8; margin-bottom: 40px; }
 .look-detail-info .btn { width: 100%; height: 52px; }
 .look-detail-info .btn-primary { margin-bottom: 12px; }
+.look-detail-info .btn-outline {
+  border-color: var(--mood-accent, var(--accent));
+  color: var(--mood-accent, var(--text));
+  transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+.look-detail-info .btn-outline:hover {
+  background: var(--mood-accent, var(--accent));
+  color: #fff;
+}
 .shop-this-look { margin-top: 100px; }
-.shop-this-look .section-title { font-size: 24px; margin-bottom: 32px; }
-.look-product-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
-.look-product-card .thumb { height: 360px; }
-.look-product-card .add-btn { width: 100%; height: 42px; background: var(--accent); color: #fff; margin-top: 12px; border: none; }
+.shop-this-look .section-title { margin-bottom: 32px; }
+
+/* ---- 스타일링 보드 (시그니처 요소): 상품 사진을 겹쳐 놓은 핀보드 구성 ---- */
+.styling-board {
+  position: relative;
+  min-height: 700px;
+  padding: 40px;
+  background: color-mix(in srgb, var(--mood-accent, var(--border)) 12%, var(--card));
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+.board-piece { position: absolute; }
+.board-frame {
+  width: 100%; height: 100%;
+  box-shadow: 0 18px 40px rgba(23, 21, 26, 0.16);
+  overflow: hidden;
+  background: var(--card);
+  position: relative;
+}
+.board-frame img { width: 100%; height: 100%; object-fit: cover; }
+.board-piece.slot-1 { width: 300px; height: 380px; left: 0; top: 0; z-index: 3; }
+.board-piece.slot-1 .board-frame { transform: rotate(-3deg); }
+.board-piece.slot-2 { width: 220px; height: 260px; left: 270px; top: 200px; z-index: 2; }
+.board-piece.slot-2 .board-frame { transform: rotate(4deg); }
+.board-piece.slot-3 { width: 190px; height: 190px; right: 40px; top: 20px; z-index: 1; }
+.board-piece.slot-3 .board-frame { transform: rotate(2deg); }
+.board-piece.slot-4 { width: 210px; height: 170px; right: 20px; bottom: 30px; z-index: 4; }
+.board-piece.slot-4 .board-frame { transform: rotate(-4deg); }
+
+.board-piece .wish-btn { z-index: 2; }
+
+/* 가격표는 사진 박스 회전과 무관하게 항상 수평, 사진 바로 아래(4번만 위)에 매달려 절대 겹치지 않음 */
+.board-pin {
+  position: absolute;
+  top: 100%;
+  margin-top: 14px;
+  left: 0;
+  width: 168px;
+  background: var(--card);
+  padding: 12px 14px;
+  box-shadow: 0 6px 18px rgba(23, 21, 26, 0.14);
+  z-index: 5;
+}
+.board-piece.slot-4 .board-pin { top: auto; bottom: 100%; margin-top: 0; margin-bottom: 14px; }
+.board-pin .name { font-size: 12px; font-weight: 600; margin-bottom: 4px; }
+.board-pin .price { font-size: 12px; color: var(--text-sub); margin-bottom: 10px; }
+.board-pin .add-btn {
+  display: block;
+  width: 100%; height: 34px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  font-size: 11px;
+}
+
+@media (max-width: 1100px) {
+  .styling-board { min-height: 0; padding: 24px; display: flex; flex-direction: column; gap: 56px; }
+  .board-piece { position: static; width: 100% !important; height: 280px !important; }
+  .board-frame { transform: none !important; }
+  .board-pin { position: static; margin: 14px 0 0 !important; width: 100%; }
+}
 
 /* ========================================================
    SHOP PAGE
@@ -435,7 +623,7 @@ img { display: block; max-width: 100%; }
 .product-images img { width: 320px; height: 420px; object-fit: cover; }
 .product-info { width: 500px; padding-left: 70px; }
 .product-info .cat { font-size: 11px; color: var(--text-sub); }
-.product-info .name { font-size: 28px; font-weight: 600; margin-top: 12px; }
+.product-info .name { font-family: var(--serif); font-weight: 600; font-size: 36px; letter-spacing: -0.8px; margin-top: 14px; }
 .product-info .price { font-size: 18px; font-weight: 600; margin-top: 20px; }
 .product-info .desc { font-size: 13px; line-height: 1.8; margin-top: 30px; color: var(--text-sub); }
 .option-block { margin-top: 30px; }
@@ -495,7 +683,7 @@ img { display: block; max-width: 100%; }
 .order-complete { max-width: 640px; margin: 0 auto; padding: 140px 60px; text-align: center; }
 .order-complete .check-icon { width: 72px; height: 72px; margin: 0 auto 30px; }
 .order-complete .check-icon svg { width: 100%; height: 100%; stroke: var(--text); fill: none; stroke-width: 1.5; }
-.order-complete h1 { font-size: 28px; font-weight: 700; margin: 0 0 10px; }
+.order-complete h1 { font-family: var(--serif); font-weight: 600; font-size: 34px; letter-spacing: -0.5px; margin: 0 0 10px; }
 .order-complete .desc { font-size: 14px; color: var(--text-sub); margin-bottom: 40px; }
 .order-info-box { border: 1px solid var(--border); background: #fff; padding: 28px; text-align: left; margin-bottom: 40px; }
 .order-info-box .row { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 14px; }
@@ -517,7 +705,7 @@ img { display: block; max-width: 100%; }
    MY PAGE
    ======================================================== */
 .mypage { padding: 0 60px 120px; }
-.mypage-hello { font-size: 32px; font-weight: 700; padding: 60px 0 40px; }
+.mypage-hello { font-family: var(--serif); font-weight: 600; font-size: 40px; letter-spacing: -1px; padding: 60px 0 40px; }
 .mypage-layout { display: flex; gap: 40px; align-items: flex-start; }
 .mypage-sidebar { width: 220px; flex-shrink: 0; }
 .mypage-sidebar .menu-item {
@@ -551,7 +739,7 @@ img { display: block; max-width: 100%; }
   background: #FFFFFF;
   border-radius: var(--radius-modal);
 }
-.modal-box h2 { font-size: 24px; margin: 0 0 30px; }
+.modal-box h2 { font-family: var(--serif); font-style: italic; font-weight: 500; font-size: 28px; margin: 0 0 30px; }
 .modal-box input {
   width: 100%; height: 48px;
   border: 1px solid var(--border-strong);

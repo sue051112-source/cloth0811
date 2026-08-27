@@ -16,9 +16,10 @@ export function renderLookDetailPage({ params }) {
   }
 
   const products = look.productIds.map((id) => getProductById(id)).filter(Boolean);
+  const moodVar = `var(--mood-${look.mood.toLowerCase()})`;
 
   outlet.innerHTML = `
-    <div class="view-fade look-detail">
+    <div class="view-fade look-detail" style="--mood-accent: ${moodVar}">
       <div class="look-detail-top">
         <img class="look-detail-img" src="${look.image}" alt="${look.name}" />
         <div class="look-detail-info">
@@ -33,21 +34,20 @@ export function renderLookDetailPage({ params }) {
 
       <div class="shop-this-look">
         <h2 class="section-title">SHOP THIS LOOK</h2>
-        <div class="look-product-grid" id="look-product-grid">
+        <div class="styling-board" id="styling-board">
           ${products
             .map(
-              (p) => `
-            <div class="look-product-card">
-              <div class="thumb" style="position:relative">
+              (p, i) => `
+            <div class="board-piece slot-${i + 1}">
+              <div class="board-frame">
                 <img src="${p.images[0]}" alt="${p.name}" />
                 <button class="wish-btn ${isWished(p.id) ? "active" : ""}" data-wish-id="${p.id}">${ICON_HEART}</button>
               </div>
-              <div class="info">
-                <div class="cat">${p.category}</div>
+              <div class="board-pin">
                 <div class="name">${p.name}</div>
                 <div class="price">${formatPrice(p.price)}</div>
+                <button class="add-btn" data-add-id="${p.id}">ADD TO BAG</button>
               </div>
-              <button class="add-btn" data-add-id="${p.id}">ADD TO BAG</button>
             </div>
           `
             )
@@ -74,7 +74,7 @@ export function renderLookDetailPage({ params }) {
     });
   });
 
-  document.getElementById("look-product-grid").addEventListener("click", async (e) => {
+  document.getElementById("styling-board").addEventListener("click", async (e) => {
     const wishBtn = e.target.closest("[data-wish-id]");
     if (wishBtn) {
       wishBtn.disabled = true;
@@ -93,10 +93,10 @@ export function renderLookDetailPage({ params }) {
       showToast("장바구니에 상품을 추가했어.");
       return;
     }
-    const img = e.target.closest(".look-product-card img");
+    const img = e.target.closest(".board-frame img");
     if (img) {
-      const card = img.closest(".look-product-card");
-      const addId = card.querySelector("[data-add-id]").getAttribute("data-add-id");
+      const piece = img.closest(".board-piece");
+      const addId = piece.querySelector("[data-add-id]").getAttribute("data-add-id");
       navigate(`/product/${addId}`);
     }
   });

@@ -20,16 +20,15 @@ export function renderHomePage() {
   outlet.innerHTML = `
     <div class="view-fade">
       <section class="hero">
-        <div class="hero-left">
-          <div class="sub-text" style="letter-spacing:2px">FITROOM EDIT 01</div>
+        <img class="hero-image" src="${heroImage()}" alt="FITROOM hero look" />
+        <div class="hero-spine">FITROOM EDIT 01</div>
+        <div class="hero-text-card">
+          <div class="hero-eyebrow">오늘의 무드를 골라보세요</div>
           <h1 class="hero-title">WHAT ARE YOU<br />WEARING TODAY?</h1>
           <p class="hero-desc">오늘의 상황과 무드에 맞는<br />당신만의 LOOK을 찾아보세요.</p>
           <button class="btn btn-primary hero-btn" id="hero-find-btn">FIND MY LOOK</button>
         </div>
-        <div class="hero-right">
-          <img src="${heroImage()}" alt="FITROOM hero look" />
-          <div class="hero-tag">LOOK 01</div>
-        </div>
+        <div class="hero-tag">LOOK 01</div>
       </section>
 
       <section class="situation-section">
@@ -71,8 +70,14 @@ export function renderHomePage() {
       <section class="best-look">
         <h2 class="section-title-lg">BEST LOOKS</h2>
         <p class="section-desc">지금 가장 많이 저장된 스타일.</p>
-        <div class="look-grid-3" id="best-look-grid">
-          ${bestLooks.map((l) => renderLookCard(l)).join("")}
+        <div class="best-asym" id="best-look-grid">
+          <div class="best-asym-feature">${renderLookCard(bestLooks[0])}</div>
+          <div class="best-asym-side">
+            ${bestLooks
+              .slice(1, 3)
+              .map((l) => renderLookCard(l))
+              .join("")}
+          </div>
         </div>
       </section>
 

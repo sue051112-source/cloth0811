@@ -8,7 +8,7 @@ import { requireLogin } from "./authModal.js";
 export function renderLookCard(look, { showSaveIcon = false } = {}) {
   const saved = showSaveIcon && isLookSaved(look.id);
   return `
-    <div class="look-card" data-look-id="${look.id}">
+    <div class="look-card" data-look-id="${look.id}" style="--mood-accent: var(--mood-${look.mood.toLowerCase()})">
       <div class="thumb" style="position:relative">
         <img src="${look.image}" alt="${look.name}" />
         ${
